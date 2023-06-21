@@ -1,6 +1,6 @@
 {
-  "short_name": "test",
-  "name": "test",
+  "short_name": "authentication",
+  "name": "authentication",
   "icons": [
     {
       "src": "favicon.ico",

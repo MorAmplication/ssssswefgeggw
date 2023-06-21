@@ -1,5 +1,5 @@
 {
-  "name": "@test/server",
+  "name": "@authentication/server",
   "private": true,
   "scripts": {
     "start": "nest start",
