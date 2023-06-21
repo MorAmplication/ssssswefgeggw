@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { Test8 } from "../test8/base/Test8";
 
 @ObjectType()
 export class Test8Info implements Partial<Test8> {
