@@ -11,14 +11,9 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { PrismaService } from "../../prisma/prisma.service";
 import { Prisma, Test8 } from "@prisma/client";
-import { PasswordService } from "../../auth/password.service";
-import { transformStringFieldUpdateInput } from "../../prisma.util";
 
 export class Test8ServiceBase {
-  constructor(
-    protected readonly prisma: PrismaService,
-    protected readonly passwordService: PasswordService
-  ) {}
+  constructor(protected readonly prisma: PrismaService) {}
 
   async count<T extends Prisma.Test8CountArgs>(
     args: Prisma.SelectSubset<T, Prisma.Test8CountArgs>
@@ -39,32 +34,12 @@ export class Test8ServiceBase {
   async create<T extends Prisma.Test8CreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.Test8CreateArgs>
   ): Promise<Test8> {
-    return this.prisma.test8.create<T>({
-      ...args,
-
-      data: {
-        ...args.data,
-        password: await this.passwordService.hash(args.data.password),
-      },
-    });
+    return this.prisma.test8.create<T>(args);
   }
   async update<T extends Prisma.Test8UpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.Test8UpdateArgs>
   ): Promise<Test8> {
-    return this.prisma.test8.update<T>({
-      ...args,
-
-      data: {
-        ...args.data,
-
-        password:
-          args.data.password &&
-          (await transformStringFieldUpdateInput(
-            args.data.password,
-            (password) => this.passwordService.hash(password)
-          )),
-      },
-    });
+    return this.prisma.test8.update<T>(args);
   }
   async delete<T extends Prisma.Test8DeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.Test8DeleteArgs>
