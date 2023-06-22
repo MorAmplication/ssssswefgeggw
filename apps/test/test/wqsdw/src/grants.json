@@ -61,31 +61,31 @@
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "User",
     "action": "create:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "User",
     "action": "update:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "User",
     "action": "read:own",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "User",
     "action": "delete:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "User",
     "action": "read:any",
     "attributes": "*"
   }
