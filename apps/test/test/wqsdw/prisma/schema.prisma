@@ -23,16 +23,16 @@ model Test8 {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  username  String   @unique
-  password  String
-  roles     Json
 }
 
-model Test8 {
+model User {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  firstName String?
+  lastName  String?
   username  String   @unique
   password  String
   roles     Json
+  cfsassfsd String?
 }
