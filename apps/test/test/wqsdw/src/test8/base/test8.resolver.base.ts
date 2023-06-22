@@ -18,9 +18,6 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
-import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateTest8Args } from "./CreateTest8Args";
-import { UpdateTest8Args } from "./UpdateTest8Args";
 import { DeleteTest8Args } from "./DeleteTest8Args";
 import { Test8CountArgs } from "./Test8CountArgs";
 import { Test8FindManyArgs } from "./Test8FindManyArgs";
@@ -76,45 +73,6 @@ export class Test8ResolverBase {
       return null;
     }
     return result;
-  }
-
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Test8)
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "create",
-    possession: "any",
-  })
-  async createTest8(@graphql.Args() args: CreateTest8Args): Promise<Test8> {
-    return await this.service.create({
-      ...args,
-      data: args.data,
-    });
-  }
-
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Test8)
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "update",
-    possession: "any",
-  })
-  async updateTest8(
-    @graphql.Args() args: UpdateTest8Args
-  ): Promise<Test8 | null> {
-    try {
-      return await this.service.update({
-        ...args,
-        data: args.data,
-      });
-    } catch (error) {
-      if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
-          `No resource was found for ${JSON.stringify(args.where)}`
-        );
-      }
-      throw error;
-    }
   }
 
   @graphql.Mutation(() => Test8)
