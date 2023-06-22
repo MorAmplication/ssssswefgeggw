@@ -61,31 +61,61 @@
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "Mor",
     "action": "create:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "Mor",
     "action": "update:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "Mor",
     "action": "read:own",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "Mor",
     "action": "delete:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test8",
+    "resource": "Mor",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Mor",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Mor",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Mor",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Mor",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Mor",
     "action": "read:any",
     "attributes": "*"
   }
