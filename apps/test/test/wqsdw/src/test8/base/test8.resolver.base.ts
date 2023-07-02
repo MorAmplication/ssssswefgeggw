@@ -13,31 +13,16 @@ import * as graphql from "@nestjs/graphql";
 import * as apollo from "apollo-server-express";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import * as nestAccessControl from "nest-access-control";
-import * as gqlACGuard from "../../auth/gqlAC.guard";
-import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
-import * as common from "@nestjs/common";
-import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { DeleteTest8Args } from "./DeleteTest8Args";
 import { Test8CountArgs } from "./Test8CountArgs";
 import { Test8FindManyArgs } from "./Test8FindManyArgs";
 import { Test8FindUniqueArgs } from "./Test8FindUniqueArgs";
 import { Test8 } from "./Test8";
 import { Test8Service } from "../test8.service";
-@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Test8)
 export class Test8ResolverBase {
-  constructor(
-    protected readonly service: Test8Service,
-    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
-  ) {}
+  constructor(protected readonly service: Test8Service) {}
 
-  @graphql.Query(() => MetaQueryPayload)
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "read",
-    possession: "any",
-  })
   async _test8sMeta(
     @graphql.Args() args: Test8CountArgs
   ): Promise<MetaQueryPayload> {
@@ -47,24 +32,12 @@ export class Test8ResolverBase {
     };
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [Test8])
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "read",
-    possession: "any",
-  })
   async test8s(@graphql.Args() args: Test8FindManyArgs): Promise<Test8[]> {
     return this.service.findMany(args);
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => Test8, { nullable: true })
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "read",
-    possession: "own",
-  })
   async test8(
     @graphql.Args() args: Test8FindUniqueArgs
   ): Promise<Test8 | null> {
@@ -76,11 +49,6 @@ export class Test8ResolverBase {
   }
 
   @graphql.Mutation(() => Test8)
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "delete",
-    possession: "any",
-  })
   async deleteTest8(
     @graphql.Args() args: DeleteTest8Args
   ): Promise<Test8 | null> {
