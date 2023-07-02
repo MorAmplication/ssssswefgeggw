@@ -16,11 +16,7 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
-import * as nestAccessControl from "nest-access-control";
-import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { Test8Service } from "../test8.service";
-import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { Test8CreateInput } from "./Test8CreateInput";
 import { Test8WhereInput } from "./Test8WhereInput";
 import { Test8WhereUniqueInput } from "./Test8WhereUniqueInput";
@@ -28,24 +24,10 @@ import { Test8FindManyArgs } from "./Test8FindManyArgs";
 import { Test8UpdateInput } from "./Test8UpdateInput";
 import { Test8 } from "./Test8";
 
-@swagger.ApiBearerAuth()
-@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class Test8ControllerBase {
-  constructor(
-    protected readonly service: Test8Service,
-    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
-  ) {}
-  @common.UseInterceptors(AclValidateRequestInterceptor)
+  constructor(protected readonly service: Test8Service) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Test8 })
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "create",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async create(@common.Body() data: Test8CreateInput): Promise<Test8> {
     return await this.service.create({
       data: data,
@@ -57,18 +39,9 @@ export class Test8ControllerBase {
     });
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [Test8] })
   @ApiNestedQuery(Test8FindManyArgs)
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "read",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async findMany(@common.Req() request: Request): Promise<Test8[]> {
     const args = plainToClass(Test8FindManyArgs, request.query);
     return this.service.findMany({
@@ -81,18 +54,9 @@ export class Test8ControllerBase {
     });
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Test8 })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "read",
-    possession: "own",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async findOne(
     @common.Param() params: Test8WhereUniqueInput
   ): Promise<Test8 | null> {
@@ -112,18 +76,9 @@ export class Test8ControllerBase {
     return result;
   }
 
-  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Test8 })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "update",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async update(
     @common.Param() params: Test8WhereUniqueInput,
     @common.Body() data: Test8UpdateInput
@@ -151,14 +106,6 @@ export class Test8ControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Test8 })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @nestAccessControl.UseRoles({
-    resource: "Test8",
-    action: "delete",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async delete(
     @common.Param() params: Test8WhereUniqueInput
   ): Promise<Test8 | null> {

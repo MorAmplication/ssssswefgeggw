@@ -16,11 +16,7 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
-import * as nestAccessControl from "nest-access-control";
-import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { MorService } from "../mor.service";
-import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { MorCreateInput } from "./MorCreateInput";
 import { MorWhereInput } from "./MorWhereInput";
 import { MorWhereUniqueInput } from "./MorWhereUniqueInput";
@@ -28,24 +24,10 @@ import { MorFindManyArgs } from "./MorFindManyArgs";
 import { MorUpdateInput } from "./MorUpdateInput";
 import { Mor } from "./Mor";
 
-@swagger.ApiBearerAuth()
-@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class MorControllerBase {
-  constructor(
-    protected readonly service: MorService,
-    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
-  ) {}
-  @common.UseInterceptors(AclValidateRequestInterceptor)
+  constructor(protected readonly service: MorService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Mor })
-  @nestAccessControl.UseRoles({
-    resource: "Mor",
-    action: "create",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async create(@common.Body() data: MorCreateInput): Promise<Mor> {
     return await this.service.create({
       data: data,
@@ -53,24 +35,13 @@ export class MorControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
-        username: true,
-        roles: true,
       },
     });
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [Mor] })
   @ApiNestedQuery(MorFindManyArgs)
-  @nestAccessControl.UseRoles({
-    resource: "Mor",
-    action: "read",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async findMany(@common.Req() request: Request): Promise<Mor[]> {
     const args = plainToClass(MorFindManyArgs, request.query);
     return this.service.findMany({
@@ -79,24 +50,13 @@ export class MorControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
-        username: true,
-        roles: true,
       },
     });
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Mor })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @nestAccessControl.UseRoles({
-    resource: "Mor",
-    action: "read",
-    possession: "own",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async findOne(
     @common.Param() params: MorWhereUniqueInput
   ): Promise<Mor | null> {
@@ -106,8 +66,6 @@ export class MorControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
-        username: true,
-        roles: true,
       },
     });
     if (result === null) {
@@ -118,18 +76,9 @@ export class MorControllerBase {
     return result;
   }
 
-  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Mor })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @nestAccessControl.UseRoles({
-    resource: "Mor",
-    action: "update",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async update(
     @common.Param() params: MorWhereUniqueInput,
     @common.Body() data: MorUpdateInput
@@ -142,8 +91,6 @@ export class MorControllerBase {
           id: true,
           createdAt: true,
           updatedAt: true,
-          username: true,
-          roles: true,
         },
       });
     } catch (error) {
@@ -159,14 +106,6 @@ export class MorControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Mor })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @nestAccessControl.UseRoles({
-    resource: "Mor",
-    action: "delete",
-    possession: "any",
-  })
-  @swagger.ApiForbiddenResponse({
-    type: errors.ForbiddenException,
-  })
   async delete(
     @common.Param() params: MorWhereUniqueInput
   ): Promise<Mor | null> {
@@ -177,8 +116,6 @@ export class MorControllerBase {
           id: true,
           createdAt: true,
           updatedAt: true,
-          username: true,
-          roles: true,
         },
       });
     } catch (error) {
